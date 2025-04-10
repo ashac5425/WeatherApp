@@ -1,12 +1,9 @@
 from flask import Flask,request,jsonify
 import requests
+from constants import BASE_URL, API_KEY
 
 app =Flask(__name__)
 app.config['SERVER_NAME'] = '127.0.0.1:8080'
-
-API_KEY='7bb6ca1a8cb9a599184fb0c16436341c'
-
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 
 @app.route("/")
