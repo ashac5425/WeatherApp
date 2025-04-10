@@ -18,7 +18,7 @@ def getweather():
         return jsonify({"error": "Please provide a city name using ?q=your_city"}), 400
 
     # Request weather data from OpenWeatherMap
-    params = {"q": city, "appid": API_KEY, "units": "metric"}
+    params = {"q": city,"appid": API_KEY, "units": "metric"}
     response = requests.get(BASE_URL, params=params)
     
 
