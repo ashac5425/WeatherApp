@@ -1,8 +1,13 @@
 # auth.py
 from flask import request, jsonify
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
+OAUTH_TOKEN = os.getenv("OAUTH_TOKEN")
 
 # Simulated valid OAuth 2.0 token (replace with your actual token or validation logic)
-VALID_OAUTH_TOKEN = "asdfghjkl;"
+
 
 def token_required(func):
     def wrapper(*args, **kwargs):
@@ -12,7 +17,7 @@ def token_required(func):
             return jsonify({"error": "Missing or invalid Authorization header"}), 401
 
         token = auth_header.split(" ")[1]
-        if token != VALID_OAUTH_TOKEN:
+        if token != OAUTH_TOKEN:
             return jsonify({"error": "Invalid or expired token"}), 403
 
         return func(*args, **kwargs)
