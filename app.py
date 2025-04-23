@@ -41,10 +41,11 @@ def get_weather_route():
 @app.route('/postweather', methods=['POST'])
 def post_weather_route():
     data = request.get_json()
-    if not data or 'city' not in data or 'weather' not in data:
-        return jsonify({"error": "City and weather data are required"}), 400
+    if not data or 'city' not in data:
+        return jsonify({"error": "City is required"}), 400
     token = get_access_token()
     return post_weather(token, data)
+
 
 
 if __name__=="__main__":

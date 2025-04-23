@@ -11,6 +11,7 @@ def verify_token(token):
     jwks_url = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
     jwks = requests.get(jwks_url).json()
     unverified_header = jwt.get_unverified_header(token)
+    print(unverified_header)
     rsa_key = {}
     for key in jwks["keys"]:
         if key["kid"] == unverified_header["kid"]:
@@ -53,6 +54,22 @@ def get_weather(token, city):
 def post_weather(token, data):
     try:
         verify_token(token)
-        return jsonify({"message": f"Weather data for {data['city']} saved successfully."})
+        
+        city = data.get("city")
+        if not city:
+            return jsonify({"error": "City name is required"}), 400
+
+        weather_data, status_code, message = fetch_weather(city)
+        if status_code != 200:
+            return jsonify({"error": message}), status_code
+
+        return jsonify({
+            "city": weather_data["city"],
+            "temperature": f"{weather_data['temperature']}°C",
+            "humidity": f"{weather_data['humidity']}%",
+            "wind": f"{weather_data['wind']} km/h"
+        })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 401
+
