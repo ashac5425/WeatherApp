@@ -2,7 +2,7 @@ from flask import jsonify
 from jose import jwt
 import requests
 import os
-
+from constants import BASE_URL,API_KEY,fetch_weather
 AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
 API_AUDIENCE = os.getenv("AUTH0_API_AUDIENCE")
 ALGORITHMS = ["RS256"]
@@ -35,15 +35,24 @@ def verify_token(token):
 def get_weather(token, city):
     try:
         verify_token(token)
-        # Replace with actual weather fetching logic
-        return jsonify({"city": city, "weather": "Sunny", "temperature": "25°C"})
+
+        weather_data, status_code, message = fetch_weather(city)
+        if status_code != 200:
+            return jsonify({"error": message}), status_code
+
+        return jsonify({
+            "city": weather_data["city"],
+            "temperature": f"{weather_data['temperature']}°C",
+            "humidity": f"{weather_data['humidity']}%",
+            "wind": f"{weather_data['wind']} km/h"
+})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 401
 
 def post_weather(token, data):
     try:
         verify_token(token)
-        # Replace with actual logic to store weather data
         return jsonify({"message": f"Weather data for {data['city']} saved successfully."})
     except Exception as e:
         return jsonify({"error": str(e)}), 401

@@ -7,7 +7,12 @@ function fetchWeather() {
             if (data.error) {
                 resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
             } else {
-                resultDiv.innerHTML = `<p>City: ${data.city}</p><p>Weather: ${data.weather}</p><p>Temperature: ${data.temperature}</p>`;
+                resultDiv.innerHTML = `
+                    <p><strong>City:</strong> ${data.city}</p>
+                    <p><strong>Temperature:</strong> ${data.temperature}</p>
+                    <p><strong>Humidity:</strong> ${data.humidity}</p>
+                    <p><strong>Wind:</strong> ${data.wind}</p>
+                `;
             }
         })
         .catch(error => console.error('Error:', error));
